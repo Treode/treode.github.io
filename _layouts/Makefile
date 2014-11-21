@@ -1,7 +1,7 @@
 
 # Jekyll cannot automatically generate the layouts from Jade files. There is a plugin to build
-# regular pages from Jade, but not layout templates. Instead we use this a good old-fashion
-# Makefile to generate the HTML layout templates from the Jade templates; then we check both into.
+# regular pages from Jade, but not layout templates. Instead we use good old-fashion Makefile to
+# generate the HTML layout templates from the Jade templates. We check both into Git.
 
 # By default we build layout templates suitable for development work. Notably, these leave out
 # the analytics code, so that you can edit and re-edit the site, and refresh and refresh it again

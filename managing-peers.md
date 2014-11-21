@@ -1,7 +1,7 @@
 ---
-layout: default
+layout: page
 title: Managing Peers
-tag: peers
+order: 4
 ---
 
 TreodeDB allows you to control the placement of a row's replicas.  The database locates replicas by hashing the table ID and row key onto an array of cohorts, and each cohort lists the peers that host a copy of the row's value.  We use the term *peer* to designate a JVM process that is running a TreodeDB server.  Each one is usually but not necessarily hosted on its own machine.  We may casually call them servers, hosts or machines.
@@ -322,8 +322,8 @@ curl -w'\n' http://localhost:7071/table/0x1?slice=1\&amp;nslices=2
 
 Now that you know how to use TreodeDB, build something.
 
-[atlas]: img/atlas.png "Atlas"
+[atlas]: /img/atlas.png "Atlas"
 [managing-disks]: managing-disks.html "Managing Disks"
 [read-write-scan]: read-write-scan.html "Reading, Writing and Scanning"
-[slices]: img/slices.png "Slices"
+[slices]: /img/slices.png "Slices"
 [split-brain]: http://en.wikipedia.org/wiki/Split-brain_(computing) "Split Brain"

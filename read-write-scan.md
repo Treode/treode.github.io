@@ -1,7 +1,7 @@
 ---
-layout: default
+layout: page
 title: Read, Write and Scan
-tag: rws
+order: 2
 ---
 
 This page walks through the [Store API][scala-doc-store] and the [example servlet][source-servlet] built with it by using `curl` to issue requests to a running server.  This walk through connects the HTTP requests to the API methods.
@@ -34,7 +34,7 @@ The `read` method allows you to read one *or more* rows.  Each row is identified
     class TableId (val id: Long) extends AnyVal
     case class ReadOp (table: TableId, key: Bytes)
     case class Value (time: TxClock, value: Option [Bytes])
-    
+
     def read (rt: TxClock, ops: ReadOp*): Async [Seq [Value]
     
 The `rt` argument specifies when to read the data as-of.  TreodeDB returns the most recent value of the row at that time and it includes the time the row was written.  After a call to read, you are guaranteed that any subsequent writes will get a timestamp strictly after `rt`.  These connect nicely to HTTP ETags, as we will see shortly.
@@ -45,7 +45,7 @@ The `read` method is asynchronous, as are all methods in the Store API.  Nothing
         case Success (vs) => // do something with the values
         case Failure (e)  => // do something with the exception
     }
-    
+
 For this example to work with Finatra easily, we defined a [method to convert][source-toTwitterFuture] the asynchronous call into Twitter's Future, and we have created an [adaptor for Finatra's Controller][source-AsyncFinatraController] that handles this conversion transparently.
 
 ### Using `read` in the `GET` handler

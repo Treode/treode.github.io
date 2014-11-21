@@ -1,0 +1,249 @@
+/*
+ * Designed, built, and released under MIT license by @mdo.
+ * Hacked (the good kind) by Topher.
+ * Learn more at https://github.com/poole/hyde
+ */
+
+
+/*
+ * Contents
+ *
+ * Global resets
+ * Sidebar
+ * Container
+ */
+
+
+/*
+ * Global resets
+ *
+ * Update the foundational and global aspects of the page.
+ */
+
+html {
+  font-family: 'Lato', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+@media (min-width: 38em) {
+  html {
+    font-size: 18px;
+  }
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+
+a {
+  color: #2f82bd;
+}
+
+code {
+  background-color: #fff;
+  color: #bd3e2f;
+  padding: .1rem .2rem;
+  font-family: Menlo, Monaco, monospace;
+  white-space: pre;
+  word-break: initial ;
+  word-wrap: initial;
+  overflow: auto;
+}
+
+pre {
+  border: 1px solid #ccc;
+  color: #333;
+  background-color: #eee;
+  font-family: Menlo, Monaco, monospace;
+  white-space: pre;
+  word-break: initial ;
+  word-wrap: initial;
+  overflow: auto;
+}
+
+pre .output {
+  color: #bd3e2f;
+}
+
+/*
+ * Sidebar
+ *
+ * The sidebar is a drawer on narrow viewports that we toggle with our handy
+ * hamburger button in the corner of the page. It's fixed on wider viewports.
+ */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -18rem;
+  bottom: 2rem;
+  width: 18rem; 
+  padding: 2rem 0 1rem 0;
+  overflow: scroll;
+  background-color: #eee;
+  border-right: 1px solid #ccc;
+  transition: left 0.3s ease;
+}
+
+.sidebar-footer {
+  position: fixed;
+  height: 2rem;
+  left: -18rem;
+  bottom: 0;
+  width: 18rem;
+  padding: .5rem 0;
+  background-color: #eee; 
+  border-top: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  transition: left 0.3s ease;
+  font-size: 60%;
+  color: #999;
+}
+
+.sidebar-footer a {
+  color: #719EBD;
+}
+
+.sidebar-footer .fa {
+  padding: .2em;
+}
+
+a .fa {
+  border: 1px solid #eee;
+}
+
+a .fa:hover {
+  border: 1px solid #ccc;
+  background-color: #ddd;
+}
+
+.copyright {
+  text-align: left;
+}
+
+.sidebar-button {
+  position: fixed;
+  top:  0;
+  left: 0;
+  display: block;
+  width: 2rem;
+  padding: .5rem .65rem;
+  color: #555;
+  background-color: #eee  ;
+  border-radius: 0px 4px 4px 0px;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.sidebar-open .sidebar {
+  padding: 2rem 1rem 1rem 1rem;
+  left: 0;
+}
+
+.sidebar-open .sidebar-footer {
+  padding: .5rem;
+  left: 0;
+}
+
+.sidebar-open .sidebar-button {
+  left: 18rem;
+}
+
+@media (min-width: 48em) {
+  .sidebar {
+    padding: 2rem 1rem 1rem 1rem;
+    left: 0;
+  }
+  .sidebar-footer {
+    padding: .5rem;
+    left: 0;
+  }
+  .sidebar-button {
+    display: none;
+  }
+}
+
+/* Sidebar nav */
+.sidebar-nav {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.sidebar-nav-item {
+  display: block;
+  padding-left:  1rem;
+  padding-right: 1rem;
+  border: 1px solid #eee;
+  color: #333;
+  font-size: 80%;
+  line-height: 2;
+}
+a.sidebar-nav-item:hover,
+a.sidebar-nav-item:focus {
+  border: 1px solid #999;
+  background-color: #ddd;
+  text-decoration: none;
+}
+.sidebar-nav-item.active {
+  border: 1px solid #ccc;
+  background-color: #ddd;
+}
+
+.sidebar-button:before {
+  display: block;
+  content: "";
+  width: 100%;
+  padding-bottom: 2px;
+  border-top: 6px double;
+  border-bottom: 2px solid;
+
+  /* Make the border inside the box */
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+@media (min-width: 38em) {
+  .sidebar-button:before {
+    padding-bottom: .125rem;
+    border-top: .375rem double;
+    border-bottom: .125rem solid;
+  }
+}
+
+.sidebar-button:active {
+  color: #fff;
+  background-color: #505050;
+}
+
+.pull-right {
+  text-align: right;
+}
+  
+
+/* Container
+ */
+
+.container {
+  max-width: 48rem;
+}
+
+.content {
+  padding-top:    3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 48em) {
+  .content {
+    margin-left: 20rem;
+    margin-right: 2rem;
+  }
+}
+
+@media (min-width: 64em) {
+  .content {
+    margin-left: 22rem;
+    margin-right: 5rem;
+  }
+}

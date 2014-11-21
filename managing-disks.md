@@ -1,7 +1,7 @@
 ---
-layout: default
+layout: page
 title: Managing Disks
-tag: disks
+order: 3
 ---
 
 The Treode API breaks creating a new database and opening an existing database into two distinct steps.

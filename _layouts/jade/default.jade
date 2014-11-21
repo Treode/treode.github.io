@@ -1,99 +1,75 @@
 doctype html
 html(lang='en')
   head
-    meta(charset='utf-8')
+    meta(http-equiv='content-type', charset='text/html; utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1')
     meta(name='author', content='Treode, Inc.')
-    link(rel='shortcut icon', type='image/x-icon', href='favicon.ico')
-    link(rel='apple-touch-icon-precomposed', sizes='114x114', href='apple-touch-icon-114x114-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='72x72', href='apple-touch-icon-72x72-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', href='apple-touch-icon-precomposed.png')
-    link(rel='stylesheet', href='css/bootstrap.min.css')
-    link(rel='stylesheet', href='css/treode.min.css')
-    //[if lt IE 9]
-    script(src='https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js')
-    script(src='https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js')
-    //![endif]
-    title {% if page.title %} {{ page.title }} {% else %} TreodeDB {% endif %}
+    link(rel='shortcut icon', type='image/x-icon', href='{{ site.baseurl }}/img/favicon.ico')
+    link(rel='apple-touch-icon-precomposed', sizes='114x114', href='{{ site.baseurl }}/img/apple-touch-icon-114x114-precomposed.png')
+    link(rel='apple-touch-icon-precomposed', sizes='72x72', href='{{ site.baseurl }}/img/apple-touch-icon-72x72-precomposed.png')
+    link(rel='apple-touch-icon-precomposed', href='{{ site.baseurl }}/img/apple-touch-icon-precomposed.png')
+    link(rel='alternate', type='application/rss+xml', title='RSS', href='/atom.xml')
+    link(rel='stylesheet', href='{{ site.baseurl }}/css/poole.css')
+    link(rel='stylesheet', href='{{ site.baseurl }}/css/treode.css')
+    link(rel='stylesheet', href='{{ site.baseurl }}/css/syntax.css')
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Lato:300,400,700')
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css')
+    title.
+      {% if page.title %}
+        {{ page.title }} &middot; {{ site.title }}
+      {% else %}
+        {{ site.title }} &middot; {{ site.tagline }}
+      {% endif %}
 
-  body.body-navbar-fixed
-    .navbar.navbar-inverse.navbar-fixed-top(role='navigation')
-      .container
-        .navbar-header
-          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-            span.sr-only Toggle navigation
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.navbar-brand(href='//treode.com')
-            img(src='img/graphic-128x128.png', width='20px')
-          a.navbar-brand(href='./') TreodeDB
-        .collapse.navbar-collapse
-          ul.nav.navbar-nav
+  body
 
-            | {% if page.tag == 'rws' %}
-            li.active: a(href='read-write-scan.html') Read, Write, Scan
-            | {% else %}
-            li: a(href='read-write-scan.html') Read, Write, Scan
-            | {% endif %}
+    .sidebar
 
-            | {% if page.tag == 'disks' %}
-            li.active: a(href='managing-disks.html') Managing Disks
-            | {% else %}
-            li: a(href='managing-disks.html') Managing Disks
-            | {% endif %}
+      .container.sidebar-header
+          img(src='{{ site.baseurl }}/img/sidebar-logo.png')
+        
+      nav.sidebar-nav.
+        {% assign pages = site.pages | sort: 'order' %}
+        {% for node in pages %}
+          {% if node.title != null and node.layout == "page" %}
+            <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}", href="{{ site.baseurl}}{{ node.url }}">{{ node.title }}</a>
+          {% endif %}
+        {% endfor %}
 
-            | {% if page.tag == 'peers' %}
-            li.active: a(href='managing-peers.html') Managing Peers
-            | {% else %}
-            li: a(href='managing-peers.html') Managing Peers
-            | {% endif %}
+    .sidebar-footer
+      span.copyright
+        | &copy;&nbsp;
+        a(href='//www.treode.com') Treode, Inc.
+        | &nbsp;under&nbsp;
+        a(href='//creativecommons.org/licenses/by/4.0/') CC BY 4.0
+      span.pull-right
+        a(href='//www.treode.com'): i.fa.fa-home
+        a(href='//github.com/Treode/store'): i.fa.fa-github-alt
+        a(href='//forum.treode.com/'): i.fa.fa-comments-o
+        a(href='//forum.treode.com/category/blog'): i.fa.fa-rss
+        a(href='//angel.co/treode'): i.fa.fa-angellist
+        a(href='//www.linkedin.com/company/3113977'): i.fa.fa-linkedin
+        a(href='//twitter.com/treode'): i.fa.fa-twitter
+        a(href='//www.facebook.com/pages/Treode-Inc/486833728003266'): i.fa.fa-facebook
+        a(href='//plus.google.com/111423248234655296020', rel='publisher'): i.fa.fa-google-plus
 
-    .container
-      | {% if page.title %}
-      h1 {{ page.title }}
-      | {% endif %}
-      | {{ content }}
-    #footer
-      .row
-        .col-sm-4.footer-left
-          a(href='//treode.com/privacyPolicy.html') Privacy Policy
-          | &nbsp;&sdot;&nbsp;
-          a(href='//treode.com/termsOfService.html') Terms of Service
-        .col-sm-4.footer-center
-          | &copy;&nbsp;
-          a(href='//treode.com') Treode, Inc.
-          | &nbsp;under&nbsp;
-          a(href='//creativecommons.org/licenses/by/4.0/') CC BY 4.0
-        .col-sm-4.footer-right.social-bar
-          a(href='//github.com/Treode/store')
-            img(src='img/github-icon.png', alt='TreodeDB on GitHub')
-          | &nbsp;
-          a(href='//forum.treode.com/')
-            img(src='img/forum-icon.png', alt='Treode Community Forum')
-          | &nbsp;
-          a(href='//forum.treode.com/category/blog')
-            img(src='img/blog-icon.png', alt='Treode&apos;s Blog')
-          | &nbsp;
-          a(href='//twitter.com/treode')
-            img(src='img/twitter-icon.png', alt='Treode on Twitter')
-          | &nbsp;
-          a(href='//www.linkedin.com/company/3113977')
-            img(src='img/linkedin-icon.png', alt='Treode on Linked-in')
-          | &nbsp;
-          a(href='//www.facebook.com/pages/Treode-Inc/486833728003266')
-            img(src='img/facebook-icon.png', alt='Treode on Facebook')
-          | &nbsp;
-          a(href='//plus.google.com/111423248234655296020', rel='publisher')
-            img(src='img/gplus-icon.png', alt='Treode on Google+')
-  script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
-  script(src='js/bootstrap.min.js')
-  - if (!locals.dev)
+    .content.container {{ content }}
+
+    label.sidebar-button
+
+    script(src='https://code.jquery.com/jquery-2.1.1.min.js')
     script.
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-42147573-4', 'auto');
-      ga('send', 'pageview');
+      $(".sidebar-button").click(function(){
+        $("body").toggleClass("sidebar-open");
+      });
+    - if (!locals.dev)
+      script.
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-42147573-2', 'auto', {'allowLinker': true});
+        ga('require', 'linker');
+        ga('linker:autoLink', ['forum.treode.com', 'www.treode.com']);
+        ga('send', 'pageview');
