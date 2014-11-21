@@ -2,6 +2,7 @@
 layout: page
 title: Read, Write and Scan
 order: 2
+redirect_from: /store/read-write-scan.html
 ---
 
 This page walks through the [Store API][scala-doc-store] and the [example servlet][source-servlet] built with it by using `curl` to issue requests to a running server.  This walk through connects the HTTP requests to the API methods.

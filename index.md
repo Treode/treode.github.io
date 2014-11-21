@@ -2,6 +2,9 @@
 layout: page
 title: Getting Started
 order: 1
+redirect_from: /store
+redirect_from: /store/
+redirect_from: /store/index.html
 ---
 
 TreodeDB is a distributed key-value store that provides atomic writes, and it does so in a way that

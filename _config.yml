@@ -1,11 +1,18 @@
 # Dependencies
+
+gems:
+  - jekyll-redirect-from
+
 markdown:         redcarpet
+
 highlighter:      pygments
 
 # Options
+
 permalink:        pretty
 
 # Setup
+
 title:            TreodeDB
 tagline:          'Replicated, sharded, transactional.'
 description:      'A consistent and resilient database for petabytes.'

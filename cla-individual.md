@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Treode Individual CLA v1.0
+redirect_from: /store/cla-individual.html
 ---
 
 Thank you for your interest in Treode, Inc. ("Treode"). In order to clarify the intellectual
