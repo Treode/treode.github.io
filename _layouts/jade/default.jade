@@ -27,7 +27,7 @@ html(lang='en')
     .sidebar
 
       .container.sidebar-header
-          img(src='{{ site.baseurl }}/img/sidebar-logo.png')
+          a(href='//www.treode.com'): img(src='{{ site.baseurl }}/img/sidebar-logo.png')
         
       nav.sidebar-nav.
         {% assign pages = site.pages | sort: 'order' %}

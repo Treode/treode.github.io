@@ -3,7 +3,7 @@
 {% else %}
   {{ site.title }} &middot; {{ site.tagline }}
 {% endif %}
-</title></head><body><div class="sidebar"><div class="container sidebar-header"><img src="{{ site.baseurl }}/img/sidebar-logo.png"></div><nav class="sidebar-nav">{% assign pages = site.pages | sort: 'order' %}
+</title></head><body><div class="sidebar"><div class="container sidebar-header"><a href="//www.treode.com"><img src="{{ site.baseurl }}/img/sidebar-logo.png"></a></div><nav class="sidebar-nav">{% assign pages = site.pages | sort: 'order' %}
 {% for node in pages %}
   {% if node.title != null and node.layout == "page" %}
     <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}", href="{{ site.baseurl}}{{ node.url }}">{{ node.title }}</a>
