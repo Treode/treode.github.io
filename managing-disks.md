@@ -7,39 +7,43 @@ redirect_from: /store/managing-disks.html
 
 The Treode API breaks creating a new database and opening an existing database into two distinct steps.
 
-    object Store {
+```scala
+object Store {
 
-      def init (
-          hostId: HostId,
-          cellId: CellId,
-          superBlockBits: Int,
-          segmentBits: Int,
-          blockBits: Int,
-          diskBytes: Long,
-          paths: Path*
-      )
-  
-      def recover (
-          bindAddr: SocketAddress,
-          shareAddr: SocketAddress,
-          paths: Path*
-      ) (implicit
-          diskConfig: DiskConfig,
-          clusterConfig: ClusterConfig,
-          storeConfig: StoreConfig
-      ): Async [Controller]
-    }
+  def init (
+      hostId: HostId,
+      cellId: CellId,
+      superBlockBits: Int,
+      segmentBits: Int,
+      blockBits: Int,
+      diskBytes: Long,
+      paths: Path*
+  )
+
+  def recover (
+      bindAddr: SocketAddress,
+      shareAddr: SocketAddress,
+      paths: Path*
+  ) (implicit
+      diskConfig: DiskConfig,
+      clusterConfig: ClusterConfig,
+      storeConfig: StoreConfig
+  ): Async [Controller]
+}
+```
 
 The `main` method of our example server processes flags to perform those actions as two separate steps or transparently as one step.
 
-    # Create or recreate a database; performs Store.init and exit.
-    java -jar server.jar -init -host 0xF47F4AA7602F3857 -cell 0x3B69376FF6CE2141 store.db
-    
-    # Open an existing database an serve it; performs Store.recover.
-    java -jar server.jar -serve -solo store.db
-    
-    # Create a database and serve it; performs Store.init and then recover.
-    java -jar server.jar -init -serve -solo -host 0xF47F4AA7602F3857 -cell 0x3B69376FF6CE2141 store.db
+<pre class="highlight">
+<span class="c"># Create or recreate a database; performs Store.init and exit.</span>
+java -jar server.jar -init -host 0xF47F4AA7602F3857 -cell 0x3B69376FF6CE2141 store.db
+
+<span class="c"># Open an existing database an serve it; performs Store.recover.</span>
+java -jar server.jar -serve -solo store.db
+
+<span class="c"># Create a database and serve it; performs Store.init and then recover.</span>
+java -jar server.jar -init -serve -solo -host 0xF47F4AA7602F3857 -cell 0x3B69376FF6CE2141 store.db
+</pre>
 
 The API breaks these into two steps since often an install script will initialize the database, and an `/etc/rc.d` script will start the server.  In other cases, such as for this tutorial, it's convenient to combine the two steps.  Our example shows how your code can satisfy both styles.
 
@@ -57,12 +61,12 @@ You must provide a `hostId` and `cellId`, even when starting a server to run sta
 
 So let's create a database:
 
-<pre>
+<pre class="highlight">
 java -jar server.jar -init -host 0xF47F4AA7602F3857 -cell 0x3B69376FF6CE2141 store.db
-<div class="output">Jun 24, 2014 2:36:56 AM com.twitter.finagle.http.HttpMuxer$$anonfun$5 apply
+<div class="go">Jun 24, 2014 2:36:56 AM com.twitter.finagle.http.HttpMuxer$$anonfun$5 apply
 INFO: HttpMuxer[/admin/metrics.json] = com.twitter.finagle.stats.MetricsExporter(&lt;function1&gt;)
-INF [20140624-02:36:57.078] treode: Initialized drives store.db
-</div></pre>
+INF [20140624-02:36:57.078] treode: Initialized drives store.db</div>
+</pre>
 
 ## Opening an existing database
 
@@ -77,30 +81,32 @@ The `recover` method returns a `Controller` which has a wealth of fields and met
 
 Now let's open the database we created earlier:
 
-<pre>
+<pre class="highlight">
 java -jar server.jar -serve -solo store.db
-<div class="output">Jun 24, 2014 2:38:20 AM com.twitter.finagle.http.HttpMuxer$$anonfun$5 apply
+<div class="go">Jun 24, 2014 2:38:20 AM com.twitter.finagle.http.HttpMuxer$$anonfun$5 apply
 INFO: HttpMuxer[/admin/metrics.json] = com.twitter.finagle.stats.MetricsExporter(&lt;function1&gt;)
 INF [20140624-02:38:20.935] treode: Opened drives store.db
 INF [20140624-02:38:20.935] treode: Accepting peer connections to Host:F47F4AA7602F3857 on 0.0.0.0/0.0.0.0:6278
 INF [20140624-02:38:21.024] finatra: finatra process 6866 started
 INF [20140624-02:38:21.026] finatra: http server started on port: :7070
-INF [20140624-02:38:21.717] finatra: admin http server started on port: :9990
-</div></pre>
+INF [20140624-02:38:21.717] finatra: admin http server started on port: :9990</div>
+</pre>
 
 ## Adding a drive
 
 As your database grows, you will want to add a disk for more space, and the controller has the `attach` method for this purpose.
     
-    case class DriveGeometry (segmentBits: Int, blockBits: Int, diskBytes: Long)
+```scala
+case class DriveGeometry (segmentBits: Int, blockBits: Int, diskBytes: Long)
 
-    case class DriveAttachment (path: Path, geometry: DriveGeometry)
+case class DriveAttachment (path: Path, geometry: DriveGeometry)
 
-    def attach (items: DriveAttachment*): Async [Unit]
+def attach (items: DriveAttachment*): Async [Unit]
+```
 
 We have created an HTTP endpoint for this method in our example server.  To try it out, startup a server as explained above, and then:
 
-<pre>
+<pre class="highlight">
 curl -i -w'\n' -XPOST -d@- \
     -H'content-type: application/json' \
     http://localhost:7070/drives/attach &lt;&lt; EOF
@@ -109,15 +115,15 @@ curl -i -w'\n' -XPOST -d@- \
     "geometry": { "segmentBits": 30, "blockBits": 13, "diskBytes": 1099511627776}
   } ]
 EOF
-<div class="output">HTTP/1.1 200 OK
-Content-Length: 0
-</div></pre>
+<div class="go">HTTP/1.1 200 OK
+Content-Length: 0</div>
+</pre>
 
 You can list the drives to check that the new disk is included:
 
-<pre>
+<pre class="highlight">
 curl -i -w'\n' http://localhost:7070/drives
-<div class="output">HTTP/1.1 200 OK
+<div class="go">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 246
 
@@ -131,33 +137,35 @@ Content-Length: 246
     "geometry": {"segmentBits":30, "blockBits":13, "diskBytes":1099511627776},
     "allocated":3,
     "draining": false
-  } ]
-</div></pre>
+  } ]</div>
+</pre>
   
 ## Removing a drive
   
 There will be times when you want to remove a disk too.  Perhaps it's getting old and you want to proactively replace it before it yields read errors.  Or maybe it has become too small and you want to swap it for a larger one.  The controller has the `drain` method for this purpose.
 
-    def drain (paths: Path*): Async [Unit]
+```scala
+def drain (paths: Path*): Async [Unit]
+```
     
 Before draining a disk, you should check your startup scripts first (or configuration files, wherever you list the paths fed to `recover`).  If that includes a disk you want to drain, remove the path from there first, then issue the `drain` command.  When TreodeDB has moved all data from the old disk to others, it will update the list of paths in the superblocks.  This way, you don't need to precisely synchronize your scripts and configuration with TreodeDB detaching drives.
 
 We have also created an HTTP endpoint for this method.  To try it out, type:
 
-<pre>
+<pre class="highlight">
 curl -i -w'\n' -XPOST \
     -H'content-type: application/json' \
     -d'["store2.db"]' \
     http://localhost:7070/drives/drain
-<div class="output">HTTP/1.1 200 OK
-Content-Length: 0
-</div></pre>
+<div class="go">HTTP/1.1 200 OK
+Content-Length: 0</div>
+</pre>
         
 If you have lots of data on the disk, you'll see it listed as draining until it's finally detached:
 
-<pre>
+<pre class="highlight">
 curl -i -w'\n' http://localhost:7070/drives
-<div class="output">HTTP/1.1 200 OK
+<div class="go">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 245
 
@@ -171,14 +179,14 @@ Content-Length: 245
     "geometry": {"segmentBits":30, "blockBits":13, "diskBytes":1099511627776},
     "allocated":3,
     "draining": false
-  } ]
-</div></pre>
+  } ]</div>
+</pre>
 
 At this time though, you probably have little or no data on the disk, so TreodeDB detached it quickly.  You will have seen a log message annoucing the detachment, and your output from the previous command will look more like:
 
-<pre>
+<pre class="highlight">
 curl -i -w'\n' http://localhost:7070/drives
-<div class="output">HTTP/1.1 200 OK
+<div class="go">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 123
 
@@ -187,8 +195,8 @@ Content-Length: 123
     "geometry": {"segmentBits":30, "blockBits":13, "diskBytes":1099511627776},
     "allocated": 2,
     "draining": true
-  } ]
-</div></pre>
+  } ]</div>
+</pre>
 
 ## Next
 

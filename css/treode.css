@@ -36,12 +36,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: #2f82bd;
+  color: #2972A6;
 }
 
 code {
   background-color: #fff;
-  color: #bd3e2f;
+  color: #a63729;
   padding: .1rem .2rem;
   font-family: Menlo, Monaco, monospace;
   white-space: pre;
@@ -59,10 +59,6 @@ pre {
   word-break: initial ;
   word-wrap: initial;
   overflow: auto;
-}
-
-pre .output {
-  color: #bd3e2f;
 }
 
 /*

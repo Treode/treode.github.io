@@ -33,13 +33,13 @@ You will need [SBT][sbt]; [install it][sbt-install] if you haven't already.
 Clone the [TreodeDB respository][store-github] and then build the assembly.  The example is in the
 `examples/finatra` directory, separate from the main code.  It even has its own build file.
 
-<pre>
+<pre class="highlight">
 git clone git@github.com:Treode/store.git
 cd store/examples/finatra
 sbt assembly
-<div class="output">[info] Packaging /Users/topher/src/store/examples/finatra/target/scala-2.10/server.jar ...
-[info] Done packaging.
-</div></pre>
+<div class="go">[info] Packaging /Users/topher/src/store/examples/finatra/target/scala-2.10/server.jar ...
+[info] Done packaging.</div>
+</pre>
 
 Throughout the discussions, we'll create database files.  To keep it tidy, you may want to make a
 temporary directory and link the built jar there.  Then proceed to the 
