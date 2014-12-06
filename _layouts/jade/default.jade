@@ -28,14 +28,27 @@ html(lang='en')
 
       .container.sidebar-header
           a(href='//www.treode.com'): img(src='{{ site.baseurl }}/img/sidebar-logo.png')
-        
-      nav.sidebar-nav.
-        {% assign pages = site.pages | sort: 'order' %}
-        {% for node in pages %}
-          {% if node.title != null and node.layout == "page" %}
-            <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}", href="{{ site.baseurl}}{{ node.url }}">{{ node.title }}</a>
-          {% endif %}
-        {% endfor %}
+
+      nav.sidebar-nav
+        | {% assign pages = site.pages | sort: 'order' %}
+        | {% for node in pages %}
+        |   {% if node.title != null and node.layout == "page" %}
+        |     <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}", href="{{ site.baseurl}}{{ node.url }}">{{ node.title }}</a>
+        |   {% endif %}
+        | {% endfor %}
+        hr
+        a.sidebar-nav-item(href="https://www.treode.com")
+          | Treode, Inc.
+          i.fa.fa-external-link
+        a.sidebar-nav-item(href="https://forum.treode.com")
+          | Community
+          i.fa.fa-external-link
+        a.sidebar-nav-item(href="https://forum.treode.com/category/blog")
+          | Blog
+          i.fa.fa-external-link
+        a.sidebar-nav-item(href="https://github.com/Treode/store")
+          | Source Code
+          i.fa.fa-external-link
 
     .sidebar-footer
       span.sidebar-legal
@@ -44,15 +57,12 @@ html(lang='en')
         | &nbsp;under&nbsp;
         a(href='//creativecommons.org/licenses/by/4.0/') CC BY 4.0
       span.sidebar-social
-        a(href='//www.treode.com'): i.fa.fa-home
-        a(href='//github.com/Treode/store'): i.fa.fa-github-alt
-        a(href='//forum.treode.com/'): i.fa.fa-comments-o
-        a(href='//forum.treode.com/category/blog'): i.fa.fa-rss
-        a(href='//angel.co/treode'): i.fa.fa-angellist
-        a(href='//www.linkedin.com/company/3113977'): i.fa.fa-linkedin
+        a(href='//github.com/Treode'): i.fa.fa-github-alt
         a(href='//twitter.com/treode'): i.fa.fa-twitter
         a(href='//www.facebook.com/pages/Treode-Inc/486833728003266'): i.fa.fa-facebook
         a(href='//plus.google.com/111423248234655296020', rel='publisher'): i.fa.fa-google-plus
+        a(href='//angel.co/treode'): i.fa.fa-angellist
+        a(href='//www.linkedin.com/company/3113977'): i.fa.fa-linkedin
 
     .content.container {{ content }}
 
