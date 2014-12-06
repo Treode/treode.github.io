@@ -1,8 +1,9 @@
 ---
 layout: page
 title: Managing Disks
-order: 3
+order: 4
 redirect_from: /store/managing-disks.html
+
 ---
 
 The Treode API breaks creating a new database and opening an existing database into two distinct steps.

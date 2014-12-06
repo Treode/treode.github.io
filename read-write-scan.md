@@ -1,8 +1,9 @@
 ---
 layout: page
 title: Read, Write and Scan
-order: 2
+order: 3
 redirect_from: /store/read-write-scan.html
+
 ---
 
 This page walks through the [Store API][scala-doc-store] and the [example servlet][source-servlet] built with it by using `curl` to issue requests to a running server.  This walk through connects the HTTP requests to the API methods.
@@ -348,16 +349,29 @@ After writing a complex servlet, you'll want to test it.  Finatra provides [one 
 Now you're an expert on reading, writing and scanning with TreodeDB.  Move on to [add and remove disks][manage-disks].
 
 [finatra-testing]: //finatra.info/docs/index.html#testing "Finatra Testing"
-[get-server]: ./ "Get the example server"
+
+[get-server]: getting-started.html "Get the example server"
+
 [jackson]: //wiki.fasterxml.com/JacksonHome "Jackson JSON Processor"
+
 [manage-disks]: managing-disks.html "Managing Disks"
+
 [manage-peers]: managing-peers.html "Managing Peers"
+
 [source-servlet]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/Resource.scala "Example servlet using the Store API"
+
 [source-spec]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/test/scala/example/ResourceSpec.scala "Example test using the stub store"
+
 [source-read]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/Resource.scala#L15-31 "Example to handle GET for read"
+
 [source-scan]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/Resource.scala#L33-45 "Example to handle GET for scan"
+
 [source-write]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/Resource.scala#L70-84 "Example to handle PUT"
+
 [source-AsyncFinatraController]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/AsyncFinatraController.scala "Class to adapt Finatra's Controller to Treode's asynchronous calls"
+
 [source-toTwitterFuture]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/package.scala#L191-192 "Method to convert Treode's Async to Twitter's Future"
-[scala-doc-store]: //oss.treode.com/docs/scala/store/0.1.0/#com.treode.store.Store "Store API"
-[scala-doc-stub]: //oss.treode.com/docs/scala/store/0.1.0/#com.treode.store.stubs.StubStore "Stub Store API"
+
+[scala-doc-store]: //oss.treode.com/docs/scala/store/0.1.0#com.treode.store.Store "Store API"
+
+[scala-doc-stub]: //oss.treode.com/docs/scala/store/0.1.0#com.treode.store.stubs.StubStore "Stub Store API"

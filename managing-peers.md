@@ -1,8 +1,9 @@
 ---
 layout: page
 title: Managing Peers
-order: 4
+order: 5
 redirect_from: /store/managing-peers.html
+
 ---
 
 TreodeDB allows you to control the placement of a row's replicas.  The database locates replicas by hashing the table ID and row key onto an array of cohorts, and each cohort lists the peers that host a copy of the row's value.  We use the term *peer* to designate a JVM process that is running a TreodeDB server.  Each one is usually but not necessarily hosted on its own machine.  We may casually call them servers, hosts or machines.
