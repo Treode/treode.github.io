@@ -123,7 +123,7 @@ is an appropriate network interface and what are appropriate security mechanisms
 layer over TreodeDB to connect your remote interface to the API.
 
 
-[api-docs]: http://oss.treode.com/docs/scala/store/{{site.vers}} "API Docs"
+[api-docs]: //oss.treode.com/docs/scala/store/{{site.vers}} "API Docs"
 
 [arch]: /img/architecture.png "Architecture"
 
