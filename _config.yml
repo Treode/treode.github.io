@@ -18,3 +18,6 @@ tagline:          'Replicated, sharded, transactional.'
 description:      'A consistent and resilient database for petabytes.'
 url:              http://treode.github.io
 baseurl:          ''
+
+vers:             0.1.0
+blob:             https://github.com/Treode/store/blob/release/0.1.0

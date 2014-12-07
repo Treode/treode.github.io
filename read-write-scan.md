@@ -40,9 +40,9 @@ case class Value (time: TxClock, value: Option [Bytes])
 
 def read (rt: TxClock, ops: ReadOp*): Async [Seq [Value]
 ```
-    
+
 The `rt` argument specifies when to read the data as-of.  TreodeDB returns the most recent value of the row at that time and it includes the time the row was written.  After a call to read, you are guaranteed that any subsequent writes will get a timestamp strictly after `rt`.  These connect nicely to HTTP ETags, as we will see shortly.
-    
+
 The `read` method is asynchronous, as are all methods in the Store API.  Nothing actually happens until you supply a callback through the chained `run` method.
 
 ```scala
@@ -55,12 +55,12 @@ read (TxClock.now, ReadOp (0x1, Bytes ("a key"))) run {
 For this example to work with Finatra easily, we defined a [method to convert][source-toTwitterFuture] the asynchronous call into Twitter's Future, and we have created an [adaptor for Finatra's Controller][source-AsyncFinatraController] that handles this conversion transparently.
 
 ### Using `read` in the `GET` handler
-  
+
 You can read multiple rows at a time.  Though our example only reads one row at a time, you can use the more general functionality as necessary for your requirements.  Our servlet uses [Jackson][jackson] to convert between byte values in the database and JSON objects in HTTP requests and responses; you can convert HTTP entities into bytes any way you need.
 
 Our servlet handles GET requests for `/table/{table-id}?key={key-string}`, and it takes special action depending on two headers.  If `If-Modified-Since` is present, then the servlet sends the full response only when the value is newer; without the header it always sends the full response.  If `Last-Modification-Before` is present, then the servlet uses it for the as-of time, otherwise it defaults to `TxClock.now`.
 
-To form the HTTP response, the servlet converts the byte value to a JSON object, and it uses the timestamp on the value for the `ETag`.  If our servlet retrieved multiple rows and composed some compound object from them, then it would use the *maximum* of the timestamps for the `ETag`. 
+To form the HTTP response, the servlet converts the byte value to a JSON object, and it uses the timestamp on the value for the `ETag`.  If our servlet retrieved multiple rows and composed some compound object from them, then it would use the *maximum* of the timestamps for the `ETag`.
 
 We've introduced several convenience methods to get the request parameters; here's the meat of [processing the GET request][source-read]:
 
@@ -85,10 +85,10 @@ get ("/table/:name") { request =>
         render.notFound.nothing
     }}}
 ```
-        
+
 ### Try out `GET`
 
-Now we know what the servlet does to handle a GET request: 
+Now we know what the servlet does to handle a GET request:
 
 <pre class="highlight">
 curl -i -w'\n' http://localhost:7070/table/0x1?key=apple
@@ -96,9 +96,9 @@ curl -i -w'\n' http://localhost:7070/table/0x1?key=apple
 Content-Type: text/plain
 Content-Length: 0</div>
 </pre>
-    
+
 However, there's no data in our database.  Although we haven't covered `write` yet, let's put some data in there.  In fact, let's PUT a row and then PUT it a second time to overwrite it:
-  
+
 <pre class="highlight">
 curl -i -w'\n' -XPUT \
     -H'content-type: application/json' \
@@ -130,9 +130,9 @@ Content-Length: 16
 
 {"v":"anteater"}</div>
 </pre>
-    
+
 Without any special direction, we get the most recent value.  We can add a header to get the older value.  Use the ETag from *your* second request above for `Last-Modification-Before`, but subtract one from its value:
-    
+
 <pre class="highlight">
 curl -i -w'\n' \
     -H'last-modification-before: 0x4FC8E29D1E620' \
@@ -144,14 +144,14 @@ Content-Length: 16
 
 {"v":"antelope"}</div>
 </pre>
-    
+
 With the addition of the header, we get the older value and its ETag.  Neat, eh?
-        
+
 ## Writing
 
 ### The `write` method
 
-The `write` method allows you to update one or more rows *atomically*.  You supply a condition time, and if any of the rows has been changed since that time, then the write will do nothing.  If none of the rows has been updated, then the write will succeed and return the new timestamp of the modified rows. 
+The `write` method allows you to update one or more rows *atomically*.  You supply a condition time, and if any of the rows has been changed since that time, then the write will do nothing.  If none of the rows has been updated, then the write will succeed and return the new timestamp of the modified rows.
 
 ```scala
 case class TxId (id: Bytes, time: Instant)
@@ -164,7 +164,7 @@ case class Delete (table: TableId, key: Bytes) extends WriteOp
 
 def write (xid: TxId, ct: TxClock, ops: WriteOp*): Async [TxClock]
 ```
-    
+
 The `ct` argument is the condition time.  The latest timestamp on every row must be on or before `ct`.  The `xid` argument is a transaction ID; we will discuss it more in the next section.
 
 The `write` method supports four kinds of updates.  `Create` and `Update` are similar, except that `Create` requires that the row is currently deleted, whereas `Update` will apply the change whether the row currently exists or not.  `Delete` should be clear enough.  `Hold` does not change the value of the row; thus it may participate in the write condition without effecting a change.
@@ -187,7 +187,7 @@ write (TxId.random (host), TxClock.now, op1) run {
 ### The `status` method
 
 Sometimes your client will loose its connection to the server.  It happens.  What if the connection should break while the client is awaiting a response to a write request?  The `status` method allows a client to reconnect to any server the the cell and learn the outcome of an earlier write.
-    
+
 ```scala
 sealed abstract class TxStatus
 case object Aborted extends TxStatus
@@ -195,11 +195,11 @@ case class Committed (wt: TxClock) extends TxStatus
 
 def status (xid: TxId): Async [TxStatus]
 ```
-    
+
 The transaction ID must be universally unique.  You can construct one on the server side or on the client side.  If it's constructed on server side, then the client does not know the id and has little recourse if its network connection is broken.  On the other hand, if the client constructs the id, then it and can use it after reconnecting to get the status of its write.
 
 The transaction ID includes a `time` field.  This is not necessary for correctness of the atomic write, so the transaction can complete even when its slightly skewed from server's clock.  The server only uses the `time` to purge old statuses.
-    
+
 ### Using `write` in the `PUT` handler
 
 Our servlet also handles PUT requests for `/table/{table-id}?key={key-string}`.  If the client chooses a transaction id, it may place it in the `Transaction-ID` header, otherwise the server will make one.  The client can include the condition time, that is the `ETag` from an earlier read, in the `If-Unmodified-Since` header; without that the server will use `TxClock.now` as the condition time.
@@ -226,7 +226,7 @@ put ("/table/:name") { request =>
       render.status (PreconditionFailed) .nothing
   }}
 ```
-      
+
 ### Try out `PUT`
 
 We have already tried PUT, back when we added data to GET.  Now we know what happened behind the scenes.  However, we haven't yet tried to put data with an precondition. Using the ETag from *your* second PUT request above, but again subtracting one:
@@ -241,7 +241,7 @@ curl -i -w'\n' -XPUT \
 Content-Type: text/plain
 Content-Length: 0</div>
 </pre>
-    
+
 The failure tells the client that its update is based on stale data.  The client can GET the new data, and then the client can reconcile the update and new data as best fits its needs.
 
 ## Scanning
@@ -266,7 +266,7 @@ case class Cell (key: Bytes, time: TxClock, value: Option [Bytes])
 
 def scan (table: TableId, start: Bound [Key], window: Window, slice: Slice): AsyncIterator [Cell]
 ```
-    
+
 The `start` argument begins the scan at a given key, and the asynchronous iterator provides a `whilst` method for you to end the scan as you desire.  The `window` argument controls which portion of the update history will be included.  And the `slice` argument allows you to specify how large of a hash space you want to slice the keys into&mdash;any power of two works&mdash;and which of those slices you want in this scan.
 
 The time window called `Recent` is the most like scanning a table without history.  It selects the most recent value for a row before `later` as long as that value was set after `earlier`.  The `Between` time window selects values with timestamps between `later` and `earlier`; it will return multiple rows for a key if that key was updated multiple times during the period.  The time window called `Through` combines the two.  It chooses values with timestamps between `later` and `earlier` as well as the most recent value as of `earlier`.
@@ -285,7 +285,7 @@ scan (0x1, start, Recent.now, Slice.all)
     case Failure (e)  => // do something with the exception
 }
 ```
-    
+
 ### Using `scan` in the `GET` handler
 
 The `scan` method offers great flexibility, however our servlet will limit the options.  A GET request for `/table/{table-id}?slice=0&nslices=1` will use the `Recent` window. Much like with read, scanning will use the two headers `If-Modified-Since` and `Last-Modification-Before`.  The first will correspond to `earlier` and the second to `later`, so the servlet will return the most recent update as of `Last-Modification-Before` (inclusive, default now) if that update was made after `If-Modified-Since` (inclusive, default UNIX epoch).  The parameters `slice` and `nslices` are optional, and the servlet will scan the full table if they are missing.
@@ -307,7 +307,7 @@ def scan (request: Request, table: TableId): Async [ResponseBuilder] = {
     render.appjson (vs)
   }}
 ```
-    
+
 ### Try out `GET` for `scan`
 
 This is going to do something very close to what you hopefully expect.
@@ -320,7 +320,7 @@ Content-Length: 66
 
 [{"key":"apple","time":1403587424020001,"value":{"v":"anteater"}}]</div>
 </pre>
-    
+
 And you can try out slices too; remember that the number of slices must be a power of two.
 
 <pre class="highlight">
@@ -358,20 +358,20 @@ Now you're an expert on reading, writing and scanning with TreodeDB.  Move on to
 
 [manage-peers]: managing-peers.html "Managing Peers"
 
-[source-servlet]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/Resource.scala "Example servlet using the Store API"
+[source-servlet]: {{site.blob}}/examples/finatra/src/main/scala/example/Resource.scala "Example servlet using the Store API"
 
-[source-spec]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/test/scala/example/ResourceSpec.scala "Example test using the stub store"
+[source-spec]: {{site.blob}}/examples/finatra/src/test/scala/example/ResourceSpec.scala "Example test using the stub store"
 
-[source-read]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/Resource.scala#L15-31 "Example to handle GET for read"
+[source-read]: {{site.blob}}/examples/finatra/src/main/scala/example/Resource.scala#L15-31 "Example to handle GET for read"
 
-[source-scan]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/Resource.scala#L33-45 "Example to handle GET for scan"
+[source-scan]: {{site.blob}}/examples/finatra/src/main/scala/example/Resource.scala#L33-45 "Example to handle GET for scan"
 
-[source-write]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/Resource.scala#L70-84 "Example to handle PUT"
+[source-write]: {{site.blob}}/examples/finatra/src/main/scala/example/Resource.scala#L70-84 "Example to handle PUT"
 
-[source-AsyncFinatraController]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/AsyncFinatraController.scala "Class to adapt Finatra's Controller to Treode's asynchronous calls"
+[source-AsyncFinatraController]: {{site.blob}}/examples/finatra/src/main/scala/example/AsyncFinatraController.scala "Class to adapt Finatra's Controller to Treode's asynchronous calls"
 
-[source-toTwitterFuture]: //github.com/Treode/store/blob/release/0.1.0/examples/finatra/src/main/scala/example/package.scala#L191-192 "Method to convert Treode's Async to Twitter's Future"
+[source-toTwitterFuture]: {{site.blob}}/examples/finatra/src/main/scala/example/package.scala#L191-192 "Method to convert Treode's Async to Twitter's Future"
 
-[scala-doc-store]: //oss.treode.com/docs/scala/store/0.1.0#com.treode.store.Store "Store API"
+[scala-doc-store]: //oss.treode.com/docs/scala/store/{{site.vers}}#com.treode.store.Store "Store API"
 
-[scala-doc-stub]: //oss.treode.com/docs/scala/store/0.1.0#com.treode.store.stubs.StubStore "Stub Store API"
+[scala-doc-stub]: //oss.treode.com/docs/scala/store/{{site.vers}}#com.treode.store.stubs.StubStore "Stub Store API"

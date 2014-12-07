@@ -29,7 +29,7 @@ trait Store {
   def write (xid: TxId, ct: TxClock, ops: WriteOp*): Async [TxClock]
 
   def scan (table: TableId, start: Bound [Key], window: Window, slice: Slice): AsyncIterator [Cell]
-  
+
 }
 ```
 
@@ -88,7 +88,7 @@ object Store {
 Much like the Store interface, TreodeDB provides the Scala API for the controller.  You decide what is an appropriate network interface and what are appropriate security mechanisms.  Then you add a layer over TreodeDB to connect your remote interface to the API.
 
 
-[api-docs]: http://oss.treode.com/docs/scala/store/0.1.0 "API Docs"
+[api-docs]: http://oss.treode.com/docs/scala/store/{{site.vers}} "API Docs"
 
 [arch]: img/architecture.png "Architecture"
 
@@ -106,7 +106,7 @@ Much like the Store interface, TreodeDB provides the Scala API for the controlle
 
 [sbt-install]: //www.scala-sbt.org/0.13/tutorial/Setup.html "Install SBT"
 
-[server-jar]: https://oss.treode.com/jars/com.treode.store/0.1.0/server.jar
+[server-jar]: https://oss.treode.com/jars/com.treode.store/{{site.vers}}/server.jar
 
 [stackoverflow]: http://stackoverflow.com "Stack Overflow"
 

@@ -30,7 +30,7 @@ sbt assembly
 [info] Done packaging.</div>
 </pre>
 
-Throughout the discussions, we'll create database files. To keep it tidy, you may want to make a temporary directory and link the built jar there. Then proceed to the 
+Throughout the discussions, we'll create database files. To keep it tidy, you may want to make a temporary directory and link the built jar there. Then proceed to the
 [first walk through][rws].
 
 
@@ -46,8 +46,8 @@ resolvers += Resolver.url (
     "treode-oss",
     new URL ("https://oss.treode.com/ivy")) (Resolver.ivyStylePatterns)
 
-libraryDependencies += 
-    "com.treode" %% "store" % "0.1.0" % "compile;test->stubs"
+libraryDependencies +=
+    "com.treode" %% "store" % "{{site.vers}}" % "compile;test->stubs"
 ```
 
 
@@ -57,7 +57,7 @@ If you have any troubles, we are here to help.
 
 - [Online Forum][online-forum] on Discourse
 - [Chat Room][online-chat] on HipChat
-- \#treode on StackOverflow: 
+- \#treode on StackOverflow:
   [Browse questions asked][stackoverflow-read] or [post a new one][stackoverflow-ask]
 - In person: Buy one of us a margarita.
 
@@ -77,7 +77,7 @@ If you have any troubles, we are here to help.
 
 [scala]: //www.scala-lang.org/ "The Scala Programming Language"
 
-[server-jar]: https://oss.treode.com/jars/com.treode.store/0.1.0/server.jar
+[server-jar]: https://oss.treode.com/jars/com.treode.store/{{site.vers}}/server.jar
 
 [stackoverflow-read]: http://stackoverflow.com/questions/tagged/treode "Read questions on Stack Overflow tagged with treode"
 
