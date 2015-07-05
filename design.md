@@ -7,7 +7,7 @@ order: 6
 
 ## Design
 
-Across nodes, TreodeDB uses mini-transactions, similar to Sinfonia ([ACM][sinfonia-acm], [PDF][sinfonia-pdf]) and Scalaris ([ACM][scalaris-acm], [website][scalaris-web]), and it uses single-decree Paxos to commit or abort a transaction.  To find data, TreodeDB hashes the row key onto an array of server cohorts, called the atlas, which is controlled by the system administrator.  It requires a positive acknowledgement from a quorum of the cohort to complete a read or write.
+Across nodes, TreodeDB uses mini-transactions, similar to Sinfonia ([ACM][sinfonia-acm], [PDF][sinfonia-pdf]) and Scalaris ([ACM][scalaris-acm], [website][scalaris-web]), and it uses single-decree Paxos to commit or abort a transaction.  To find data, TreodeDB hashes the row key onto an array of shards, called the atlas, which is controlled by the system administrator.  It requires a positive acknowledgement from a quorum of the shard to complete a read or write.
 
 On a node, TreodeDB uses a tiered table similar to LevelDB, though TreodeDB maintains timestamped versions of the rows.  To lock data when a transaction is in progress, it hashes the row key onto a lock space, whose size can be configured.  The locks use timestamp locking so that readers of older values do not block writers.
 
@@ -29,17 +29,13 @@ Some applications will require the availability and geographic distribution that
 
 Most transactional storage systems use the traditional interface of begin, commit and rollback.  The client opens a transaction and holds it open until complete.  For a web client to hold anything open causes significant problems, especially when handling disconnects.  Furthermore, begin/commit does not match RESTful design.  On the other hand, optimistic concurrency using timestamps integrates easily with the HTTP specification.
 
-#### Separating Storage from Modeling and Protocol
-
-Building a distributed data store that provides transactions is challenging.  Devising a generic data model is also challenging, and and there are many options for the client protocol and security mechanism.  Separating the key-value store as an API allows TreodeDB to support multiple ways to tackle the other issues.  TreodeDB is opinionated about distributed transactional storage, but not about much else.
-
-#### The Cohort Atlas
+#### The Shard Atlas
 
 Systems such as Google's BigTable ([ACM][bigtable-acm], [PDF][bigtable-pdf]) and HBase&trade; ([website][hbase-web]), layout data by key range.  To locate data for a read or write, a reader fetches indirect nodes from peers to navigate the range map, a type of bushy search tree.  This adds time to reads and writes, which the user needs to be quick.  The systems can cache the indirect nodes, but that requires memory that could be put to other uses.  These systems do this ostensibly to collate data for scans, which the user anticipates will take time.  Those queries whose first phase happens to match the key choice will benefit, but queries that require the initial collation by some other property of the row must still juggle the data.  These systems hamper small frequent read-write operations and consume memory to save time for the few data analyses whose first map-reduce phase happens to match the physical layout.
 
-Systems like Amazon's Dynamo ([ACM][dynamo-acm]) and Riak ([website][riak-web]) use a consistent hash to locate data.  This makes finding an item's replicas fast since the system does not need to fetch nodes of a search tree, but it removes control from the system adminstrators.  Ceph ([USENIX][ceph-usenix], [website][ceph-web]) uses a different consistent hash function, one that provides the system administrator more control.  With that it function it builds array of replica groups, and then to locate an item it hashes the identifier onto that array.  TreodeDB borrows the last part of that idea, but it does not prescribe any particular mechanism to generate the replica groups (cohorts).
+Systems like Amazon's Dynamo ([ACM][dynamo-acm]) and Riak ([website][riak-web]) use a consistent hash to locate data.  This makes finding an item's replicas fast since the system does not need to fetch nodes of a search tree, but it removes control from the system adminstrators.  Ceph ([USENIX][ceph-usenix], [website][ceph-web]) uses a different consistent hash function, one that provides the system administrator more control.  With that it function it builds array of replica groups, and then to locate an item it hashes the identifier onto that array.  TreodeDB borrows the last part of that idea, but it does not prescribe any particular mechanism to generate the replica groups (shards).
 
-In summary, hashing the key onto an array of cohorts allows read-write operations to run quickly.  It saves us from the delusion that our choice of collation benefits all data analyses.  Finally, the mechanism affords the system administrator a reasonable level of control over replica placement.
+In summary, hashing the key onto an array of shards allows read-write operations to run quickly.  It saves us from the delusion that our choice of collation benefits all data analyses.  Finally, the mechanism affords the system administrator a reasonable level of control over replica placement.
 
 
 

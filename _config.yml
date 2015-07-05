@@ -19,5 +19,4 @@ description:      'A consistent and resilient database for petabytes.'
 url:              http://treode.github.io
 baseurl:          ''
 
-vers:             0.2.0
-blob:             https://github.com/Treode/store/blob/release/0.2.0
+vers:             0.3.0-SNAPSHOT
