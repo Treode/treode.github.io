@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Managing Peers
-order: 5
+order: 6
 redirect_from: /store/managing-peers.html
 ---
 

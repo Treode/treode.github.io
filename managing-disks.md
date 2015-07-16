@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Managing Disks
-order: 4
+order: 5
 redirect_from: /store/managing-disks.html
 
 ---
@@ -86,7 +86,7 @@ Content-Length: 246
 [ { "path": "store2.3kv",
     "geometry": {"segmentBits":30, "blockBits":13, "diskBytes":1099511627776},
     "allocated": 2,
-    "draining": false }, 
+    "draining": false },
   { "path": "store.3kv",
     "geometry": {"segmentBits":30, "blockBits":13, "diskBytes":1099511627776},
     "allocated": 2,
@@ -121,7 +121,7 @@ Content-Length: 245
     "geometry": {"segmentBits":30, "blockBits":13, "diskBytes":1099511627776},
     "allocated": 2,
     "draining": true
-  }, 
+  },
   { "path": "store.3kv",
     "geometry": {"segmentBits":30, "blockBits":13, "diskBytes":1099511627776},
     "allocated":3,

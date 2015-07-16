@@ -1,67 +1,18 @@
 ---
 layout: page
-title: Read, Write and Scan
+title: Read & Write
 order: 3
+redirect_from: /read-write-scan.html
 redirect_from: /store/read-write-scan.html
 
 ---
 
-This page walks through the RESTful API by using `curl`.
+This page walks through the RESTful API for reading and writing by using `curl`.
 
 
-## Setup the Server
+## Prerequisites
 
-If you haven&#700;t already, [download the server.jar][get-server].
-
-Next, initialize the database file, which we&#700;ll call `store.3kv`.
-
-<pre class="highlight">
-java -jar server.jar init -host 0xF47F4AA7602F3857 -cell 0x3B69376FF6CE2141 store.3kv
-<span class="go">Jul 04, 2015 10:17:18 AM com.treode.disk.DiskEvents changedDisks
-INFO: Attached disks: "store.3kv"</span>
-</pre>
-
-Now start the server.
-
-<pre class="highlight">
-java -jar server.jar serve -solo store.3kv
-<span class="go">I 0703 14:57:51.775 THREAD1: /admin => com.twitter.server.handler.SummaryHandler
-&hellip;
-I 0704 17:17:20.039 THREAD1: Serving admin http on 0.0.0.0/0.0.0.0:9990
-I 0704 17:17:20.054 THREAD1: Finagle version 6.26.0 (rev=f8ea987f8da7dbe34a4fe1cb481446b5a0d34b56) built at 20150625-094005
-I 0704 17:17:20.449 THREAD32: Reattaching disks: "store.3kv"
-I 0704 17:17:20.633 THREAD32: Accepting peer connections to Host:F47F4AA7602F3857 for Cell:3B69376FF6CE2141 on 0.0.0.0/0.0.0.0:6278
-I 0704 17:17:20.886 THREAD1: Tracer: com.twitter.finagle.zipkin.thrift.SamplingTracer</span>
-</pre>
-
-We'll discuss the flags `-host`, `-cell` and `-solo` in [managing peers][manage-peers]. And we&#700;ll say more about `init` and `serve` in [managing disks][manage-disks].
-
-
-## Upload a Schema
-
-Each table is identified by a 64 bit number, but we want to use symbolic names in our URLs. The schema maps names to IDs.
-
-```
-table <name> {
-    id: <number>;
-};
-
-...more tables...
-```
-
-Upload the schema by performing an HTTP PUT to `/admin/treode/schema`.
-
-<pre class="highlight">
-curl -i -w'\n' -XPUT -d@- http://localhost:9990/admin/treode/schema &lt;&lt; EOF
-table fruit {
-    id: 1;
-};
-EOF
-<span class="go">HTTP/1.1 200 OK
-Content-Length: 0</span>
-</pre>
-
-We will use the `fruit` table in the examples that follow.
+If you haven&#700;t already, [setup a server][get-server].
 
 
 ## Write a Row
@@ -254,53 +205,5 @@ Content-Length: 0</span>
 
 A `Transaction-ID` must be unique, and the clients are responsible for ensuring this. Choosing a random value of 128 bits or more will likely do the trick, though you could use other methods to make a unique ID. It is encoded into the `Transaction-ID` header as a hexadecimal string.
 
-## Scan the Table
-
-To scan the most recent values of the whole table, GET just `/<table>`.
-
-<pre class="highlight">
-curl -i -w'\n' http://localhost:7070/fruit
-<span class="go">HTTP/1.1 200 OK
-Content-Type: application/json
-Transfer-Encoding: chunked
-
-[ {"key": "apple", "time": 1436030718013001, "value": "granny smith"},
-  {"key": "grape", "time": 1436030718013001, "value": "cabernet"} ]</span>
-</pre>
-
-You can scan a past snapshot of the table:
-
-<pre class="highlight">
-curl -i -w'\n' http://localhost:7070/fruit?until=1436030359000000
-<span class="go">HTTP/1.1 200 OK
-Content-Type: application/json
-Transfer-Encoding: chunked
-
-[ {"key": "apple", "time": 1436030358171001, "value": "sour"} ]</span>
-</pre>
-
-And you can see all changes over a window of time:
-
-<pre class="highlight">
-curl -i -w'\n' 'http://localhost:7070/fruit?since=1436030359000000&until=1436030719000000&pick=between'
-<span class="go">HTTP/1.1 200 OK
-Content-Type: application/json
-Transfer-Encoding: chunked
-
-[ {"key": "apple", "time": 1436030718013001, "value": "granny smith"},
-  {"key": "apple", "time": 1436030453060001, "value": "green"},
-  {"key": "grape", "time": 1436030718013001, "value": "cabernet"} ]</span>
-</pre>
-
-The `since` parameter defaults to time 0. The `until` parameter defaults the current time. And the `pick` parameter defaults to `latest`.
-
-
-## Next
-
-Now you&#700;re an expert on reading, writing and scanning with TreodeDB.  Move on to [add and remove disks][manage-disks].
 
 [get-server]: /getting-started "Getting Started"
-
-[manage-disks]: /managing-disks "Managing Disks"
-
-[manage-peers]: /managing-peers "Managing Peers"
