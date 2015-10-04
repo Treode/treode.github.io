@@ -3,11 +3,11 @@
 {% else %}
   {{ site.title }} &middot; {{ site.tagline }}
 {% endif %}
-</title></head><body><div class="sidebar"><div class="container sidebar-header"><a href="//www.treode.com"><img src="{{ site.baseurl }}/img/sidebar-logo.png"></a></div><nav class="sidebar-nav">{% assign pages = site.pages | sort: 'order' %}
+</title></head><body><div class="sidebar"><div class="container sidebar-header"><img src="{{ site.baseurl }}/img/sidebar-logo.png"></div><nav class="sidebar-nav">{% assign pages = site.pages | sort: 'order' %}
 {% for node in pages %}
   {% if node.title != null and node.layout == "page" %}
     <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}", href="{{ site.baseurl}}{{ node.url }}">{{ node.title }}</a>
   {% endif %}
-{% endfor %}<hr><a href="https://forum.treode.com" class="sidebar-nav-item">Community<i class="fa fa-external-link"></i></a><a href="https://forum.treode.com/category/blog" class="sidebar-nav-item">Blog<i class="fa fa-external-link"></i></a><a href="https://github.com/Treode/store" class="sidebar-nav-item">Source Code<i class="fa fa-external-link"></i></a></nav></div><div class="sidebar-footer"><span class="sidebar-legal">&copy;&nbsp;<a href="//www.treode.com">Treode, Inc.</a>&nbsp;under&nbsp;<a href="//creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span><span class="sidebar-social"><a href="//github.com/Treode"><i class="fa fa-github-alt"></i></a><a href="//twitter.com/treode"><i class="fa fa-twitter"></i></a><a href="//www.facebook.com/pages/Treode-Inc/486833728003266"><i class="fa fa-facebook"></i></a><a href="//plus.google.com/111423248234655296020" rel="publisher"><i class="fa fa-google-plus"></i></a><a href="//angel.co/treode"><i class="fa fa-angellist"></i></a><a href="//www.linkedin.com/company/3113977"><i class="fa fa-linkedin"></i></a></span></div><div class="content container">{{ content }}</div><label class="sidebar-button"></label><script src="https://code.jquery.com/jquery-2.1.1.min.js"></script><script>$(".sidebar-button").click(function(){
+{% endfor %}<hr><a href="https://github.com/Treode/store" class="sidebar-nav-item">Source Code<i class="fa fa-external-link"></i></a></nav></div><div class="sidebar-footer"><span class="sidebar-legal">&copy;&nbsp;<a href="//www.treode.com">Treode, Inc.</a>&nbsp;under&nbsp;<a href="//creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span></div><div class="content container">{{ content }}</div><label class="sidebar-button"></label><script src="https://code.jquery.com/jquery-2.1.1.min.js"></script><script>$(".sidebar-button").click(function(){
   $("body").toggleClass("sidebar-open");
 });</script></body></html>

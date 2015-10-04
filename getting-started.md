@@ -10,7 +10,7 @@ redirect_from: /store/getting-started.html
 Retrieve the [server.jar][server-jar].
 
 ```sh
-curl https://oss.treode.com/jars/{{site.vers}}/server-{{site.vers}}.jar -o server.jar
+curl http://treode.github.io/jars/server.jar -o server.jar
 ```
 
 Throughout the discussions, we&#700;ll create database files. To keep it tidy, you may want to make a temporary directory and move the jar there.
