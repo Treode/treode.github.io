@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Design & Philosophy
-order: 6
+order: 7
 
 ---
 

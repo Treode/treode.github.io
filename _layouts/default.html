@@ -8,6 +8,6 @@
   {% if node.title != null and node.layout == "page" %}
     <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}", href="{{ site.baseurl}}{{ node.url }}">{{ node.title }}</a>
   {% endif %}
-{% endfor %}<hr><a href="https://github.com/Treode/store" class="sidebar-nav-item">Source Code<i class="fa fa-external-link"></i></a></nav></div><div class="sidebar-footer"><span class="sidebar-legal">&copy;&nbsp;<a href="//www.treode.com">Treode, Inc.</a>&nbsp;under&nbsp;<a href="//creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span></div><div class="content container">{{ content }}</div><label class="sidebar-button"></label><script src="https://code.jquery.com/jquery-2.1.1.min.js"></script><script>$(".sidebar-button").click(function(){
+{% endfor %}<hr><a href="https://github.com/Treode/store" class="sidebar-nav-item">Source Code<i class="fa fa-external-link"></i></a></nav></div><div class="sidebar-footer"><span class="sidebar-legal">&copy;&nbsp;<a href="//www.treode.com">Treode, Inc.</a>&nbsp;under&nbsp;<a href="//creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span></div><div class="content container">{{ content }}</div><label class="sidebar-button"></label><script src="https://code.jquery.com/jquery-2.1.1.min.js"></script><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script>$(".sidebar-button").click(function(){
   $("body").toggleClass("sidebar-open");
 });</script></body></html>

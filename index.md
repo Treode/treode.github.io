@@ -25,7 +25,7 @@ You may attach new disks to a live server and drain existing disks from it.  You
 
 [arch]: /img/architecture.png "Architecture"
 
-[cbw]: https://forum.treode.com/t/eventual-consistency-and-transactions-working-together/36 "Eventual Consistency and Transactions Working Together"
+[cbw]: /cbw "Conditional Batch Write"
 
 [manage-disks]: /managing-disks "Managing Disks"
 
