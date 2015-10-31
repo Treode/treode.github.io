@@ -72,29 +72,12 @@ Content-Length: 0</span>
 We will use the `fruit` table in the examples for [read and write][read-write], and [scan][scan].
 
 
-## Get in Touch
-
-If you have any troubles, we are here to help.
-
-- [Online Forum][online-forum] on Discourse
-- \#treode on StackOverflow:
-  [Browse questions asked][stackoverflow-read] or [post a new one][stackoverflow-ask]
-- In person, we accept two forms of payment: margaritas and spicy food.
-
-
-
 [manage-disks]: /managing-disks "Managing Disks"
 
 [manage-peers]: /managing-peers "Managing Peers"
-
-[online-forum]: https://forum.treode.com "Forum for Treode Users and Developers"
 
 [read-write]: /read-write "Read & Write"
 
 [scan]: /scan "Scanning"
 
-[server-jar]: https://oss.treode.com/jars/{{site.vers}}/server-{{site.vers}}.jar
-
-[stackoverflow-read]: http://stackoverflow.com/questions/tagged/treode "Read questions on Stack Overflow tagged with treode"
-
-[stackoverflow-ask]: http://stackoverflow.com/questions/ask?tags=treode "Post a question on Stack Overflow tagged with treode"
+[server-jar]: http://treode.github.io/jars/server.jar "server.jar"
