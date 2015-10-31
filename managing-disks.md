@@ -42,11 +42,11 @@ INFO: Attached disks: "store.3kv"</span>
 
 ## Opening an existing database
 
-You may also supply multiple paths to the `serve` method, however it is only necessary to supply one.  All disks attached to a server are listed in the superblock on all disks, so TreodeDB can find all disks when given any one of them.  Without this trick, adding and removing disks would require you to synchronize your startup scripts (or configuration files) with the database&#700;s commands to change the disks.
+You may also supply multiple paths to the `serve` method, however it is only necessary to supply one.  All disks attached to a server are listed in the superblock on all disks, so TreodeDB can find all disks when given any one of them.  Without this trick, adding and removing disks would require you to synchronize your startup scripts (or configuration files) with the database's commands to change the disks.
 
 You also supply two related socket addresses.  The `-bindAddr` is the address on which the server will listen for connections from peers in the storage server, and it often does not specify the host explicitly.  The `-shareAddr` is the address other peers use to connect to this one, and it must be given a concrete host.  In many cases, one would bind on `*:port` and share `hostname:port`, that is one would bind and share the same port number.  In other more specialized cases, one might setup IP chains or other network configuration that would require the two port numbers to differ.
 
-Now let&#700;s open the database we created earlier.
+Now let's open the database we created earlier.
 
 <pre class="highlight">
 java -jar server.jar serve -solo store.3kv
@@ -109,7 +109,7 @@ Content-Length: 0</span>
 Before draining a disk, you should check your startup scripts first (or configuration files, or wherever you list the paths fed to `serve`).  If that includes a disk you want to drain, remove the path from there first, then issue the `drain` command. When TreodeDB has moved all data from the old disk to others, it will update the list of paths in the superblocks.  This way, you don't need to precisely synchronize your scripts and configuration with TreodeDB detaching drives.
 
 
-If you have lots of data on the disk, you&#700;ll see it listed as draining until it's finally detached:
+If you have lots of data on the disk, you'll see it listed as draining until it's finally detached:
 
 <pre class="highlight">
 curl -i -w'\n' http://localhost:9990/admin/treode/drives

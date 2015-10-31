@@ -3,7 +3,10 @@
 gems:
   - jekyll-redirect-from
 
-markdown:         redcarpet
+markdown:         kramdown
+
+kramdown:
+    entity_output: as_input
 
 highlighter:      pygments
 

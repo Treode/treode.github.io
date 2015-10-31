@@ -10,7 +10,7 @@ This page walks through the RESTful API for scanning by using `curl`.
 
 ## Prerequisites
 
-If you haven&#700;t already, [setup a server][get-server], and then [add some data][read-write].
+If you haven't already, [setup a server][get-server], and then [add some data][read-write].
 
 
 ## Scan the Latest

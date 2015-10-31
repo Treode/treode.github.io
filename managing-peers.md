@@ -5,13 +5,13 @@ order: 6
 redirect_from: /store/managing-peers.html
 ---
 
-TreodeDB allows you to control the placement of a shard&#700;s replicas. The database locates replicas by hashing the table ID and row key onto an array of shards, and each shard lists the peers that host a copy of the shard&#700;s data. We use the term *peer* to designate a JVM process that is running a TreodeDB server. Each one is usually but not necessarily hosted on its own machine. We may casually call them servers, hosts or machines.
+TreodeDB allows you to control the placement of a shard's replicas. The database locates replicas by hashing the table ID and row key onto an array of shards, and each shard lists the peers that host a copy of the shard's data. We use the term *peer* to designate a JVM process that is running a TreodeDB server. Each one is usually but not necessarily hosted on its own machine. We may casually call them servers, hosts or machines.
 
 ![Atlas][atlas]
 
 There are four shards in this example atlas, and there are six peers in the cell. We have arranged it so that each peer appears in two shards, and no pair appears into two shards, but you need not do it that way. You have considerable freedom as there are only a few constraints: the number of shards must be a power of two, the number of distinct peers in each shard must be odd, and all peers must be able to connect to each other.  There are no other constraints. You may list a peer in any number of shards; one peer may appear with another peer in multiple shards or not; two peers may or may not run on the same machine, rack, bay, colo or datacenter; peers may have different processors, memory, disk and network speed; and so on.
 
-You will face performance and reliability tradeoffs when laying out shards. For example, locating replicas on one rack will speed response time but put all replicas at risk of loosing power or network together. You will face tradeoffs when growing your cluster. For example, you may want to rebalance replicas after adding each machine, or you may want to delay rebalancing them until you have added a whole rack. You already have enough constraints to juggle when managing large clusters, so TreodeDB&#700;s atlas is flexible.
+You will face performance and reliability tradeoffs when laying out shards. For example, locating replicas on one rack will speed response time but put all replicas at risk of loosing power or network together. You will face tradeoffs when growing your cluster. For example, you may want to rebalance replicas after adding each machine, or you may want to delay rebalancing them until you have added a whole rack. You already have enough constraints to juggle when managing large clusters, so TreodeDB's atlas is flexible.
 
 ## Hailing Existing Servers
 
@@ -35,7 +35,7 @@ I 0704 19:13:53.565 THREAD32: Connected to Host:F47F4AA7602F3857 at /127.0.0.1:5
 I 0704 19:17:56.417 THREAD32: Connected to Host:4FC3013EE2AE1737 at /127.0.0.1:6279 : localhost/127.0.0.1:55887</span>
 </pre>
 
-You supply the host ID and address of several different peers, separated by commas.  The new server will contact those servers and exchange information, including the atlas.  You only need to hail one server that&#700;s up, but more is okay. Generally you would hail several to ensure that at least one of them responds.
+You supply the host ID and address of several different peers, separated by commas.  The new server will contact those servers and exchange information, including the atlas.  You only need to hail one server that's up, but more is okay. Generally you would hail several to ensure that at least one of them responds.
 
 As a result of this new server hailing the existing one, it is now looped into all the gossip that flows through the cell.  In particular, it is aware of the atlas.
 
@@ -50,7 +50,7 @@ Content-Length: 52
 
 ## All servers are equally functional
 
-This second server can now handle GET and PUT requests too.  Let&#700;s do a PUT on this new server, and then a GET of that value on the original.
+This second server can now handle GET and PUT requests too.  Let's do a PUT on this new server, and then a GET of that value on the original.
 
 <pre class="highlight">
 curl -w'\n' -i -XPUT -d@- \
@@ -80,7 +80,7 @@ In a TreodeDB cell, every host can handle read, write and scan.  Some hosts may 
 
 ## Settled, Issuing and Moving
 
-We now have two of our three servers running.  Let&#700;s start the third.
+We now have two of our three servers running.  Let's start the third.
 
 <pre class="highlight">
 java -jar server.jar init -host 0x4FC3013EE2AE1737 -cell 0x3B69376FF6CE2141 store-host3.3kv
@@ -100,7 +100,7 @@ I 0704 19:17:56.228 THREAD36: Connected to Host:F47F4AA7602F3857 at /127.0.0.1:5
 I 0704 19:17:56.417 THREAD33: Connected to Host:E2D69225128DB874 at /127.0.0.1:55887 : localhost/127.0.0.1:6279</span>
 </pre>
 
-The atlas still directs the reads and writes to one replica.  We&#700;ve started three servers to give us tolerance of one failure, but we need to update the atlas before we have that.
+The atlas still directs the reads and writes to one replica.  We've started three servers to give us tolerance of one failure, but we need to update the atlas before we have that.
 
 <pre class="highlight">
 curl -w'\n' -i -XPUT -d@- \
@@ -121,7 +121,7 @@ curl -w'\n' http://localhost:9992/admin/treode/atlas
   } ]</span>
 </pre>
 
-What&#700;s `settled`?  Our cluster is small and has little data, so we hardly had a chance to see the atlas move through two other states.  If our cluster was large, like 10,000 machines, we&#700;d have a minute to witness this atlas:
+What's `settled`?  Our cluster is small and has little data, so we hardly had a chance to see the atlas move through two other states.  If our cluster was large, like 10,000 machines, we'd have a minute to witness this atlas:
 
 <pre class="highlight">
 curl -w'\n' http://localhost:9990/admin/treode/atlas
@@ -150,11 +150,11 @@ curl -w'\n' http://localhost:9990/admin/treode/atlas
   } ]</span>
 </pre>
 
-These state changes happen independently for each shard.  When you want to change a larger atlas, you can change several shards or just one at a time.  It&#700;s up to you.  You can also issue an updated atlas that cancels or changes a move, even when it&#700;s in progress.
+These state changes happen independently for each shard.  When you want to change a larger atlas, you can change several shards or just one at a time.  It's up to you.  You can also issue an updated atlas that cancels or changes a move, even when it's in progress.
 
 ## Parallel Scans
 
-Our atlas maps all keys to one shard at the moment. As our database grows, we&#700;ll need to map slices of data to different machines.  By the time our fledgeling business has that much data, it probably has money to afford a large cluster, and we could build an atlas that maps many shards, each to three or five machines.  However, to keep this walkthrough manageable, let&#700;s work with an atlas of two shards, each of one machine.
+Our atlas maps all keys to one shard at the moment. As our database grows, we'll need to map slices of data to different machines.  By the time our fledgeling business has that much data, it probably has money to afford a large cluster, and we could build an atlas that maps many shards, each to three or five machines.  However, to keep this walkthrough manageable, let's work with an atlas of two shards, each of one machine.
 
 <pre class="highlight">
 curl -w'\n' -i -XPUT -d@- \
@@ -166,7 +166,7 @@ EOF
 Content-Length: 0</span>
 </pre>
 
-Also, let&#700;s add a few more rows to the table.
+Also, let's add a few more rows to the table.
 
 <pre class="highlight">
 curl -XPUT -d'"ripe"' http://localhost:7070/fruit/banana
@@ -193,7 +193,7 @@ If this was a large table, we might want to scan pieces of it in parallel.  For 
 
 In a scan, we can slice the table as much as we want, as long as its a power of two.  Functionally, the number of slices need not be related to the number of shards.
 
-Depending on the size of the table, scanning a slice may require gathering a large amount of data from the peers in a shard.  It can be helpful if at least one of those peers is the local machine, as that will reduce network traffic. The `/peers` endpoint let&#700;s you discover which hosts hold data for the slice.
+Depending on the size of the table, scanning a slice may require gathering a large amount of data from the peers in a shard.  It can be helpful if at least one of those peers is the local machine, as that will reduce network traffic. The `/peers` endpoint let's you discover which hosts hold data for the slice.
 
 <pre class="highlight">
 curl -w'\n' http://localhost:7070/peers?slice=0\&amp;nslices=2

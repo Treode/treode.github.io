@@ -9,15 +9,15 @@ redirect_from: /store/getting-started.html
 
 Retrieve the [server.jar][server-jar].
 
-```sh
+~~~sh
 curl http://treode.github.io/jars/server.jar -o server.jar
-```
+~~~
 
-Throughout the discussions, we&#700;ll create database files. To keep it tidy, you may want to make a temporary directory and move the jar there.
+Throughout the discussions, we'll create database files. To keep it tidy, you may want to make a temporary directory and move the jar there.
 
 ## Initialize the Database
 
-Next, initialize the database file, which we&#700;ll call `store.3kv`.
+Next, initialize the database file, which we'll call `store.3kv`.
 
 <pre class="highlight">
 java -jar server.jar init -host 0xF47F4AA7602F3857 -cell 0x3B69376FF6CE2141 store.3kv
@@ -25,7 +25,7 @@ java -jar server.jar init -host 0xF47F4AA7602F3857 -cell 0x3B69376FF6CE2141 stor
 INFO: Attached disks: "store.3kv"</span>
 </pre>
 
-We'll discuss the flags `-host` and `-cell` in [managing peers][manage-peers]. We&#700;ll say more about `init` in [managing disks][manage-disks].
+We'll discuss the flags `-host` and `-cell` in [managing peers][manage-peers]. We'll say more about `init` in [managing disks][manage-disks].
 
 ## Run the Server
 
@@ -42,20 +42,20 @@ I 0704 17:17:20.633 THREAD32: Accepting peer connections to Host:F47F4AA7602F385
 I 0704 17:17:20.886 THREAD1: Tracer: com.twitter.finagle.zipkin.thrift.SamplingTracer</span>
 </pre>
 
-We&#700;ll discuss the `-solo` flag in [managing peers][manage-peers], and the `serve` command in [managing disks][manage-disks].
+We'll discuss the `-solo` flag in [managing peers][manage-peers], and the `serve` command in [managing disks][manage-disks].
 
 
 ## Upload a Schema
 
 Each table is identified by a 64 bit number, but we want to use symbolic names in our URLs. The schema maps names to IDs.
 
-```
+~~~
 table <name> {
     id: <number>;
 };
 
 ...more tables...
-```
+~~~
 
 Upload the schema by performing an HTTP PUT to `/admin/treode/schema`.
 

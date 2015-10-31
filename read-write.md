@@ -12,12 +12,12 @@ This page walks through the RESTful API for reading and writing by using `curl`.
 
 ## Prerequisites
 
-If you haven&#700;t already, [setup a server][get-server].
+If you haven't already, [setup a server][get-server].
 
 
 ## Write a Row
 
-The server will support GET, POST, PUT and DELETE for paths of the form `/<table>/<key>`. Let&#700;s PUT a value for `apple`.
+The server will support GET, POST, PUT and DELETE for paths of the form `/<table>/<key>`. Let's PUT a value for `apple`.
 
 <pre class="highlight">
 curl -i -w'\n' -XPUT -d@-  http://localhost:7070/fruit/apple &lt;&lt; EOF
